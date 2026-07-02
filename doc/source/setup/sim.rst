@@ -10,6 +10,8 @@ Prerequisites
 
 You will need the `UICC software and a USB SIM card programmer <https://open-cells.com/index.php/uiccsim-programing/>`_ from Open Cells. Ensure ``make`` and ``gcc`` are installed.
 
+Since Open Cells has stopped providing SIM cards and the corresponding readers, an alternative is to use SIM cards from `Sysmocom <https://shop.sysmocom.de/sysmoISIM-SJA5-9FV-SIM-USIM-ISIM-Card-10-pack-with-ADM-keys-9FV-chip/sysmoISIM-SJA5-9FV-10p-adm>`_ and the `pysim <https://github.com/osmocom/pysim>`_ programming tool.
+
 UICC Software Setup
 -------------------
 
@@ -93,9 +95,63 @@ Example output:
    Set HSS SQN value as: 384
 
 
+Alternatively, program a sysmoISIM card with the `pySim-prog <https://osmocom.org/projects/pysim/wiki/PySim-prog>`_ tool. The ADM key is provided with the sysmoISIM card. We use a standard PC/SC reader here as an example. Serials readers could also be used with different command line options.
+
+Install `pysim <https://github.com/osmocom/pysim>`_ for programming a sysmoISIM card:
+
+.. code-block:: bash
+
+   git clone https://gitea.osmocom.org/sim-card/pysim.git
+   cd pysim
+   python3 -m pip install -r requirements.txt
+
+Read the card with PC/SC reader:
+
+.. code-block:: bash
+
+   ./pySim-read.py -p 0
+
+Program the sysmoISIM card with the same network parameters. Note that the ADM value must match the provided value from vendor, otherwise it may lock the card for writing privileges.
+
+.. code-block:: bash
+
+   ./pySim-prog.py -p 0 \
+       -a 12345678 \
+       -i 262990100016069 \
+       --acc=0001 \
+       -s 89330061100000000831 \
+       -k fec86ba6eb707ed08905757b1bb44b8f \
+       -o C42449363BBAD02B66D16BC975D77CC1 \
+       -n OpenAirInterface \
+       --msisdn 00000001
+
+Example output:
+
+.. code-block:: text
+
+   INFO: Using PC/SC reader interface
+   Ready for Programming: Insert card now (or CTRL-C to cancel)
+   Autodetected card type: sysmoUSIM-SJA5
+   Generated card parameters :
+   > Name     : OpenAirInterface
+   > SMSP     : e1ffffffffffffffffffffffff0581005155f5ffffffffffff000000
+   > ICCID    : 89330061100000000831
+   > MCC/MNC  : 901/55
+   > IMSI     : 262990100016069
+   > Ki       : fec86ba6eb707ed08905757b1bb44b8f
+   > OPC      : C42449363BBAD02B66D16BC975D77CC1
+   > ACC      : 0001
+   > ADM1(hex): 3132333435363738
+   > OPMODE   : None
+   Programming successful: Remove card from reader
+
+
+
 Additional Resources
 --------------------
 
 * `UICC Programming Guide <https://open-cells.com/index.php/uiccsim-programing/>`_
 * `PLMN Information <https://en.wikipedia.org/wiki/Public_land_mobile_network>`_
 * `Mobile Network Codes <https://en.wikipedia.org/wiki/Mobile_country_code>`_
+* `pySim-programming tool <https://github.com/osmocom/pysim>`_
+* `PySim-prog guide <https://osmocom.org/projects/pysim/wiki/PySim-prog>`_

@@ -54,7 +54,7 @@ Hardware Requirements
 * `NVIDIA DGX Spark <https://www.nvidia.com/en-us/products/workstations/dgx-spark/>`_
 * `Ettus USRP B210/B206mini <https://www.ettus.com/product-categories/usrp-bus-series/>`_
 * `Quectel RM520N-GLAA module <https://www.quectel.com/product/5g-rm520n-series/>`_ connected to a host PC
-* `Programmable SIM cards <https://open-cells.com/index.php/sim-cards/>`_
+* `Programmable SIM cards <https://open-cells.com/index.php/sim-cards/>`_ or `sysmoISIM cards <https://shop.sysmocom.de/sysmoISIM-SJA5-9FV-SIM-USIM-ISIM-Card-10-pack-with-ADM-keys-9FV-chip/sysmoISIM-SJA5-9FV-10p-adm>`_
 * RF cables, splitters/combiners, attenuators, and/or antennas
 
 Connect the components as shown in :numref:`figure_system_setup`.
@@ -142,7 +142,28 @@ Connect the SIM card programmer, download the ``program_uicc`` tool from `here <
    # numbers below are already pre-registered in the OAI database
    sudo ./program_uicc --adm 12345678 --imsi 262990100016069 \
        --key fec86ba6eb707ed08905757b1bb44b8f \
-       --opc C42449363BBAD02B66D16BC975D77CC1
+       --opc C42449363BBAD02B66D16BC975D77CC1 \
+       --spn "OpenAirInterface" \
+       --authenticate
+
+Alternatively, use `pySim-prog <https://osmocom.org/projects/pysim/wiki/PySim-prog>`_ for a sysmoISIM card. Install `pysim <https://github.com/osmocom/pysim>`_, read the factory ICCID, and program the card with the same values using a PC/SC reader.
+
+.. code-block:: bash
+
+   git clone https://gitea.osmocom.org/sim-card/pysim.git
+   cd pysim
+   python3 -m pip install --user -r requirements.txt
+
+   ./pySim-read.py -p 0
+
+   # Note that the ADM value must match the provided value from vendor, otherwise it may lock the card.
+   ./pySim-prog.py -p 0 \
+       -a 12345678 \
+       -i 262990100016069 \
+       -s 89330061100000000831 \
+       -k fec86ba6eb707ed08905757b1bb44b8f \
+       -o C42449363BBAD02B66D16BC975D77CC1 \
+       -n OpenAirInterface
 
 Insert SIM card into the Quectel modem and configure the modem on the host machine (see :ref:`quectel`):
 

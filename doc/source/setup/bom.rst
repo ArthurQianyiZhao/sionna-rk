@@ -44,6 +44,8 @@ User Equipment
 * `M.2 to USB adapter <https://shop.tekmodul.de/M-2-USB-modem-carrier-board-standard-edition-p541645344>`_
 * `Programmable SIM cards <https://open-cells.com/index.php/sim-cards/>`_
 * `SIM card programmer <https://open-cells.com/index.php/sim-cards/>`_
+* `Alternative SIM cards from sysmocom <https://shop.sysmocom.de/sysmoISIM-SJA5-9FV-SIM-USIM-ISIM-Card-10-pack-with-ADM-keys-9FV-chip/sysmoISIM-SJA5-9FV-10p-adm>`_
+* `Alternative SIM cards programmer pysim <https://github.com/osmocom/pysim>`_
 * Host PC with USB 3.0 port; ideally with Ubuntu 22.04 or 24.04
 
 Optional Components
